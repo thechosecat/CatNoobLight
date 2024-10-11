@@ -1,0 +1,8 @@
+name: LightPlugin
+version: '${project.version}'
+main: catnoob.lightplugin.LightPlugin
+api-version: 1.21
+softdepend: [ GriefPrevention ]
+authors: [ cat_not_fox ]
+description: 讓迷途的貓咪找到回家的光亮
+website: cathdd.com
