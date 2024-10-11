@@ -1,0 +1,3 @@
+reach_limit: "&f[&6光源方塊&f] 您以達到最高可放置的光源方塊限制 &6%mount% &f個"
+no_uses: "&f[&6光源方塊&f] 您沒有使用光源方塊的權限"
+remove_others_light: "&f[&6光源方塊&f] 您拆除了 &6%player% &f的光源方塊:P"
