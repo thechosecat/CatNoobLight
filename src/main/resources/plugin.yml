@@ -9,4 +9,4 @@ website: cathdd.com
 commands:
   'light':
     usage: /light
-    description: 讓我跟羽森澀澀的秘密><
+    description: 點燈!
