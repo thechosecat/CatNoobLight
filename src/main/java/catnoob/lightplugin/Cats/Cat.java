@@ -1,7 +1,12 @@
 package catnoob.lightplugin.Cats;
 
 import catnoob.lightplugin.Dogs.dog;
+import catnoob.lightplugin.Foxs.Fox;
 import catnoob.lightplugin.LightPlugin;
+import me.ryanhamshire.GriefPrevention.Claim;
+import me.ryanhamshire.GriefPrevention.ClaimPermission;
+import me.ryanhamshire.GriefPrevention.DataStore;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Levelled;
@@ -15,13 +20,17 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 import java.util.UUID;
 
 public class Cat implements Listener {
-    private Plugin main = LightPlugin.plugin;
-    int range = 3;
+    private static DataStore dataStore = null;
+    public Cat(){
+        if (LightPlugin.UseGriefPrevention()){
+            dataStore = GriefPrevention.instance.dataStore;
+        }
+    }
+    int range = Fox.range();
     public void mark (Player player,Block block){
         player.spawnParticle(
                 Particle.BLOCK_MARKER,
@@ -54,9 +63,12 @@ public class Cat implements Listener {
         if (event.getBlock().getType() != Material.LIGHT){
             return;
         }
+        if (player.getGameMode() != GameMode.SURVIVAL){
+            return;
+        }
         if (!player.hasPermission("catnoobLight.use")){
             event.setCancelled(true);
-            player.sendMessage(main.getConfig().getString("no_uses"));
+            player.sendMessage(Fox.no_uses());
             return;
         }
         if (player.hasPermission("catnoobLight.limit.-1")){
@@ -64,12 +76,8 @@ public class Cat implements Listener {
         }
         UUID uuid = player.getUniqueId();
         if (dog.IsReachLimit(player,dog.GetPlayerCurLimit(uuid))){
-            //超過限制
-            player.sendMessage(
-                    main.getConfig().getString("reach_limit")
-                            .replace('&', '$')
-                            .replace("%mount%", String.valueOf(dog.GetPlayerCurLimit(uuid)))
-            );
+            //over limit
+            player.sendMessage(Fox.reach_limit(dog.GetPlayerCurLimit(uuid)));
             event.setCancelled(true);
             return;
         }
@@ -103,11 +111,20 @@ public class Cat implements Listener {
             return;
         }
         if (action.isRightClick()){
-            // adjust light
-            Levelled data = (Levelled) block.getBlockData();
-            data.setLevel((data.getLevel() + 1) % 16);
-            block.setBlockData(data);
-            mark(player,block);
+                if (LightPlugin.UseGriefPrevention()){
+                    Claim claim = dataStore.getClaimAt(player.getLocation(),true,null);
+                    if (claim != null){
+                        if (!claim.hasExplicitPermission(player, ClaimPermission.Access)){
+                            player.sendMessage(Fox.No_claim_adjust_per(claim));
+                            return;
+                        }
+                    }
+                }
+                // adjust light
+                Levelled data = (Levelled) block.getBlockData().clone();
+                data.setLevel((data.getLevel() + 1) % 16);
+                block.setBlockData(data);
+                mark(player, block);
         }
     }
     @EventHandler(priority = EventPriority.LOW)
@@ -127,10 +144,6 @@ public class Cat implements Listener {
         if (uuid == player.getUniqueId()){
             return;
         }
-        player.sendMessage(
-                main.getConfig().getString("remove_others_light")
-                        .replace('&', '$')
-                        .replace("%player%", Bukkit.getOfflinePlayer(uuid).getName())
-        );
+        player.sendMessage(Fox.remove_others_light(uuid));
     }
 }

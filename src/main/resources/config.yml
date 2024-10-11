@@ -1,3 +1,7 @@
 reach_limit: "&f[&6光源方塊&f] 您以達到最高可放置的光源方塊限制 &6%mount% &f個"
 no_uses: "&f[&6光源方塊&f] 您沒有使用光源方塊的權限"
 remove_others_light: "&f[&6光源方塊&f] 您拆除了 &6%player% &f的光源方塊:P"
+No_claim_adjust_per: "&f[&6光源方塊&f] 您沒有 &6%player% &f領地的的 &b基本存取&f 權限，無法調整光源方塊"
+No_Block_placed: "&f[&6光源方塊&f] 您當前尚未放置任何光源方塊"
+List_UI: "§f========§6您當前已放置的光源的方塊位置如下§f========="
+display_range: 3

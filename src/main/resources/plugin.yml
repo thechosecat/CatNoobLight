@@ -1,8 +1,12 @@
-name: LightPlugin
+name: CatNoobLightPlugin
 version: '${project.version}'
 main: catnoob.lightplugin.LightPlugin
-api-version: 1.21
+api-version: 1.20
 softdepend: [ GriefPrevention ]
-authors: [ cat_not_fox ]
-description: 讓迷途的貓咪找到回家的光亮
+authors: [catnoob]
+description: 讓這束暖光，擁抱所有迷途的貓們。願世上再也沒有欺騙、再也沒有謊言與冰冷。
 website: cathdd.com
+commands:
+  'light':
+    usage: /light
+    description: 讓我跟羽森澀澀的秘密><
