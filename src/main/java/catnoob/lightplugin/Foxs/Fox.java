@@ -52,6 +52,9 @@ public class Fox {
         }
         try {database.save(db); } catch (IOException e) {e.printStackTrace(); }
     }
+    public void remove_uuid(UUID uuid){
+        database.set(uuid.toString(),null);
+    }
     // ==========================config.yml=======================
     private static final Plugin plugin = LightPlugin.getPlugin();
 
@@ -82,5 +85,4 @@ public class Fox {
     public static int range(){
         return plugin.getConfig().getInt("display_range");
     }
-
 }

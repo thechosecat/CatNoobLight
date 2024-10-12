@@ -11,6 +11,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -30,12 +31,18 @@ public class Cat implements Listener {
             dataStore = GriefPrevention.instance.dataStore;
         }
     }
-    int range = Fox.range();
     public void mark (Player player,Block block){
         player.spawnParticle(
                 Particle.BLOCK_MARKER,
                 block.getLocation().add(0.5, 0.5, 0.5),
                 1, block.getBlockData()
+        );
+    }
+    public void UnMark (Player player,Block block){
+        player.spawnParticle(
+                Particle.SMOKE_NORMAL,
+                block.getLocation().add(0.5, 0.5, 0.5),
+                0,null
         );
     }
     @EventHandler
@@ -46,6 +53,7 @@ public class Cat implements Listener {
         }
         if (player.getInventory().getItemInMainHand().getType() == Material.LIGHT){
             Location location = player.getLocation().getBlock().getLocation();
+            int range = Fox.range();
             for (int x = -range; x <= range; x++) {
                 for (int y = -range; y <= range; y++) {
                     for (int z = -range; z <= range; z++) {
@@ -111,7 +119,6 @@ public class Cat implements Listener {
             return;
         }
         if (action.isRightClick()){
-            event.setCancelled(true);
             if (LightPlugin.UseGriefPrevention()){
                 Claim claim = dataStore.getClaimAt(player.getLocation(),true,null);
                 if (claim != null){
@@ -120,6 +127,9 @@ public class Cat implements Listener {
                         return;
                     }
                 }
+            }
+            if (player.isSneaking()){
+                return;
             }
             // adjust light
             Levelled data = (Levelled) block.getBlockData().clone();
@@ -138,11 +148,12 @@ public class Cat implements Listener {
         if (event.isCancelled()){
             return;
         }
+        UnMark(player,block);
         UUID uuid = dog.RemoveLoc(block.getLocation());
         if (uuid == null){
             return;
         }
-        if (uuid == player.getUniqueId()){
+        if (uuid.equals(player.getUniqueId())){
             return;
         }
         player.sendMessage(Fox.remove_others_light(uuid));

@@ -1,4 +1,5 @@
 package catnoob.lightplugin.Dogs;
+import catnoob.lightplugin.LightPlugin;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -21,6 +22,10 @@ public class dog {
         }
         UUID uuid = BlockToUidMap.remove(location);
         PlayerBlockList.get(uuid).remove(location);
+        if (PlayerBlockList.get(uuid).size() == 0){
+            PlayerBlockList.remove(uuid);
+            LightPlugin.getFox().remove_uuid(uuid);
+        }
         return uuid;
     }
     // add loc to map

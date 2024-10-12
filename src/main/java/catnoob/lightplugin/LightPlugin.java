@@ -52,6 +52,9 @@ public final class LightPlugin extends JavaPlugin {
     public static Plugin getPlugin(){
         return plugin;
     }
+    public static Fox getFox(){
+        return fox;
+    }
     public static Boolean UseGriefPrevention(){
         return UseGriefPrevention;
     }
