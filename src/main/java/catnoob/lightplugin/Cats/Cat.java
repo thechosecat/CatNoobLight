@@ -111,20 +111,21 @@ public class Cat implements Listener {
             return;
         }
         if (action.isRightClick()){
-                if (LightPlugin.UseGriefPrevention()){
-                    Claim claim = dataStore.getClaimAt(player.getLocation(),true,null);
-                    if (claim != null){
-                        if (!claim.hasExplicitPermission(player, ClaimPermission.Access)){
-                            player.sendMessage(Fox.No_claim_adjust_per(claim));
-                            return;
-                        }
+            event.setCancelled(true);
+            if (LightPlugin.UseGriefPrevention()){
+                Claim claim = dataStore.getClaimAt(player.getLocation(),true,null);
+                if (claim != null){
+                    if (!claim.hasExplicitPermission(player, ClaimPermission.Access)){
+                        player.sendMessage(Fox.No_claim_adjust_per(claim));
+                        return;
                     }
                 }
-                // adjust light
-                Levelled data = (Levelled) block.getBlockData().clone();
-                data.setLevel((data.getLevel() + 1) % 16);
-                block.setBlockData(data);
-                mark(player, block);
+            }
+            // adjust light
+            Levelled data = (Levelled) block.getBlockData().clone();
+            data.setLevel((data.getLevel() + 1) % 16);
+            block.setBlockData(data);
+            mark(player, block);
         }
     }
     @EventHandler(priority = EventPriority.LOW)
