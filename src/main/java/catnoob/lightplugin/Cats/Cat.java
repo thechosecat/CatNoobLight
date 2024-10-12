@@ -111,6 +111,12 @@ public class Cat implements Listener {
             return;
         }
 
+        if (!player.hasPermission("catnoobLight.use")) {
+            event.setCancelled(true);
+            player.sendMessage(Fox.no_uses());
+            return;
+        }
+
         Action action = event.getAction();
 
         if (action.isLeftClick()) {
